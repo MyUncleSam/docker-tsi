@@ -15,7 +15,7 @@ RUN /usr/bin/apt-get install -y wget libzip-dev libcurl4-openssl-dev libpng-dev 
 # set timezone
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# install extensions
+# link extensions directory
 RUN ln -s $(php-config --extension-dir --extension-dir) /php_ext
 
 # there is a bug by gd configuration of freetype, it needs to be installed at first to be able to enable freetype
@@ -32,7 +32,6 @@ RUN tar -xvzf /tmp/ioncube.tar.gz --directory=/tmp
 # ioncube needs to be loaded as first plugin, as they are loaded in alphabetical order, we need to make it the first in line
 RUN cp /tmp/ioncube/ioncube_loader_lin_7.4.so /php_ext/ioncube.so
 RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "zend_extension = $PHP_EXT_DIR/ioncube.so" > /usr/local/etc/php/conf.d/_ioncube.ini
-RUN rm /php_ext
 
 # installing and enabling cache extensions
 RUN printf '\n' | pecl install apcu
@@ -78,6 +77,7 @@ RUN echo "apache2-foreground" >> /opt/tsi/start.sh
 RUN chmod u+x /opt/tsi/start.sh
 
 # cleanup
+RUN rm /php_ext
 RUN rm -rf /tmp/*
 RUN rm /opt/tsi/crontab-file.txt
 RUN apt-get remove -y wget unzip
