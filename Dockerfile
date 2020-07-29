@@ -36,9 +36,11 @@ RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "zend_exte
 # installing and enabling cache extensions
 RUN printf '\n' | pecl install apcu
 RUN printf '\n' | pecl install memcached
+RUN printf '\n' | pecl install redis
 
 RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "extension=$PHP_EXT_DIR/memcached.so" > /usr/local/etc/php/conf.d/cache-extensions.ini
 RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "extension=$PHP_EXT_DIR/apcu.so" >> /usr/local/etc/php/conf.d/cache-extensions.ini
+RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "extension=$PHP_EXT_DIR/redis.so" >> /usr/local/etc/php/conf.d/cache-redis.ini
 
 # enabling apache modules
 RUN /usr/sbin/a2enmod rewrite
