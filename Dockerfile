@@ -7,6 +7,7 @@ ENV MAX_INPUT_TIME="120"
 ENV POST_MAX_SIZE="16M"
 ENV UPLOAD_MAX_FILESIZE="16M"
 ENV MEMORY_LIMIT="512M"
+ENV CRON_INTERVAL="* * * * *"
 
 # install dependencies
 RUN /usr/bin/apt-get update
@@ -68,7 +69,7 @@ RUN chmod a+x /opt/tsi/cron.sh
 
 # add cronjob which is executed every minute
 RUN echo "# tsi crontab import file" > /opt/tsi/crontab-file.txt
-RUN echo "* * * * * /opt/tsi/cron.sh > /dev/null 2>&1" >> /opt/tsi/crontab-file.txt
+RUN echo "${CRON_INTERVAL} /opt/tsi/cron.sh > /dev/null 2>&1" >> /opt/tsi/crontab-file.txt
 RUN crontab -u www-data /opt/tsi/crontab-file.txt
 
 # custom startscript to modify permissions
