@@ -86,6 +86,7 @@ RUN rm /opt/tsi/crontab-file.txt
 RUN apt-get remove -y wget unzip
 RUN apt-get autoclean
 RUN apt-get clean
+RUN apt-get autoremove
 
 # volumes
 VOLUME ["/var/www/html", "/var/www/html"]
