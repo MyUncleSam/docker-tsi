@@ -5,6 +5,7 @@
 - POST_MAX_SIZE="16M"
 - UPLOAD_MAX_FILESIZE="16M"
 - MEMORY_LIMIT="512M"
+- CRON_INTERVAL="* * * * *"
 
 # volumes
 - /var/www/html: TSI webpage files needs to be placed in here
