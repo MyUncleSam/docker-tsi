@@ -41,7 +41,7 @@ RUN printf '\n' | pecl install redis
 
 RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "extension=$PHP_EXT_DIR/memcached.so" > /usr/local/etc/php/conf.d/cache-extensions.ini
 RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "extension=$PHP_EXT_DIR/apcu.so" >> /usr/local/etc/php/conf.d/cache-extensions.ini
-RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "extension=$PHP_EXT_DIR/redis.so" >> /usr/local/etc/php/conf.d/cache-redis.ini
+RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "extension=$PHP_EXT_DIR/redis.so" >> /usr/local/etc/php/conf.d/cache-extensions.ini
 
 # enabling apache modules
 RUN /usr/sbin/a2enmod rewrite
