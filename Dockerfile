@@ -38,10 +38,12 @@ RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "zend_exte
 RUN printf '\n' | pecl install apcu
 RUN printf '\n' | pecl install memcached
 RUN printf '\n' | pecl install redis
+RUN printf '\n' | pecl install mongodb
 
 RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "extension=$PHP_EXT_DIR/memcached.so" > /usr/local/etc/php/conf.d/cache-extensions.ini
 RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "extension=$PHP_EXT_DIR/apcu.so" >> /usr/local/etc/php/conf.d/cache-extensions.ini
 RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "extension=$PHP_EXT_DIR/redis.so" >> /usr/local/etc/php/conf.d/cache-extensions.ini
+RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "extension=$PHP_EXT_DIR/mongodb.so" >> /usr/local/etc/php/conf.d/cache-extensions.ini
 
 # enabling apache modules
 RUN /usr/sbin/a2enmod rewrite
@@ -84,9 +86,9 @@ RUN rm /php_ext
 RUN rm -rf /tmp/*
 RUN rm /opt/tsi/crontab-file.txt
 RUN apt-get remove -y wget unzip
-RUN apt-get autoclean
-RUN apt-get clean
-RUN apt-get autoremove
+RUN apt-get autoclean -y
+RUN apt-get clean -y
+RUN apt-get autoremove -y
 
 # volumes
 VOLUME ["/var/www/html", "/var/www/html"]
