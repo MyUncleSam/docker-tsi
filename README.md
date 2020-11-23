@@ -19,6 +19,7 @@ docker build -t test-tsi -f Dockerfile .
 ```
 docker run -it --rm --name testtsi -p 80:80 -v /root/tsi/web/:/var/www/html/ -e TZ=Europe/Berlin test-tsi:latest bash
 ```
+You need to copy the TSI php files into the mounted folder (in this example /root/tsi/web/).
 
 # supported cache systems with this container
   - Memstatic (of course)

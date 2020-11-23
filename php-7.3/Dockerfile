@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:7.3.24-apache
 
 # some environment variables
 ENV TZ="Europe/Berlin"
@@ -31,17 +31,19 @@ RUN wget -O /tmp/ioncube.tar.gz https://downloads.ioncube.com/loader_downloads/i
 RUN tar -xvzf /tmp/ioncube.tar.gz --directory=/tmp
 
 # ioncube needs to be loaded as first plugin, as they are loaded in alphabetical order, we need to make it the first in line
-RUN cp /tmp/ioncube/ioncube_loader_lin_7.4.so /php_ext/ioncube.so
+RUN cp /tmp/ioncube/ioncube_loader_lin_7.3.so /php_ext/ioncube.so
 RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "zend_extension = $PHP_EXT_DIR/ioncube.so" > /usr/local/etc/php/conf.d/_ioncube.ini
 
 # installing and enabling cache extensions
 RUN printf '\n' | pecl install apcu
 RUN printf '\n' | pecl install memcached
 RUN printf '\n' | pecl install redis
+RUN printf '\n' | pecl install mongodb
 
 RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "extension=$PHP_EXT_DIR/memcached.so" > /usr/local/etc/php/conf.d/cache-extensions.ini
 RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "extension=$PHP_EXT_DIR/apcu.so" >> /usr/local/etc/php/conf.d/cache-extensions.ini
-RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "extension=$PHP_EXT_DIR/redis.so" >> /usr/local/etc/php/conf.d/cache-redis.ini
+RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "extension=$PHP_EXT_DIR/redis.so" >> /usr/local/etc/php/conf.d/cache-extensions.ini
+RUN PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) && echo "extension=$PHP_EXT_DIR/mongodb.so" >> /usr/local/etc/php/conf.d/cache-extensions.ini
 
 # enabling apache modules
 RUN /usr/sbin/a2enmod rewrite
@@ -84,9 +86,9 @@ RUN rm /php_ext
 RUN rm -rf /tmp/*
 RUN rm /opt/tsi/crontab-file.txt
 RUN apt-get remove -y wget unzip
-RUN apt-get autoclean
-RUN apt-get clean
-RUN apt-get autoremove
+RUN apt-get autoclean -y
+RUN apt-get clean -y
+RUN apt-get autoremove -y
 
 # volumes
 VOLUME ["/var/www/html", "/var/www/html"]
