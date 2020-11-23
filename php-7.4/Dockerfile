@@ -26,7 +26,7 @@ RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd curl zip bcmath pdo pdo_mysql opcache \
     && wget -O /tmp/ioncube.tar.gz https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \
     && tar -xvzf /tmp/ioncube.tar.gz --directory=/tmp \
-    cp /tmp/ioncube/ioncube_loader_lin_7.4.so /php_ext/ioncube.so \
+    && cp /tmp/ioncube/ioncube_loader_lin_7.4.so /php_ext/ioncube.so \
     && PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) \
     && echo "zend_extension = $PHP_EXT_DIR/ioncube.so" > /usr/local/etc/php/conf.d/_ioncube.ini \
     && rm -rf /tmp/*
