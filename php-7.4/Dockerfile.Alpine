@@ -1,4 +1,6 @@
-FROM php:7.4-apache
+# DO NOT USE
+# There are still commands for ubuntu and/or apache in this script. But all needed components should be installed and configured correctly
+FROM php:7.4-fpm-alpine
 
 # some environment variables
 ENV TZ="Europe/Berlin"
@@ -12,8 +14,9 @@ ENV CRON_INTERVAL="* * * * *"
 # install dependencies
 # set timezone and link extensions directory
 # create tsi base folder
-RUN /usr/bin/apt-get update \
-    && /usr/bin/apt-get install -y wget libzip-dev libcurl4-openssl-dev libpng-dev unzip tzdata cron libfreetype6-dev libjpeg-dev libpng-dev memcached libmemcached-dev \
+RUN apk — no-cache update \
+    && apk upgrade \
+    && apk add libzip-dev libpng-dev unzip tzdata memcached libmemcached-dev libpng-dev libjpeg gcc curl-dev freetype-dev libjpeg-turbo-dev autoconf build-base \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
     && ln -s $(php-config --extension-dir --extension-dir) /php_ext \
     && mkdir /opt/tsi
@@ -26,10 +29,10 @@ RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd curl zip bcmath pdo pdo_mysql opcache \
     && wget -O /tmp/ioncube.tar.gz https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \
     && tar -xvzf /tmp/ioncube.tar.gz --directory=/tmp \
-    cp /tmp/ioncube/ioncube_loader_lin_7.4.so /php_ext/ioncube.so \
+    && cp /tmp/ioncube/ioncube_loader_lin_7.4.so /php_ext/ioncube.so \
     && PHP_EXT_DIR=$(php-config --extension-dir --extension-dir) \
     && echo "zend_extension = $PHP_EXT_DIR/ioncube.so" > /usr/local/etc/php/conf.d/_ioncube.ini \
-    && rm -rf /tmp/*
+    && rm -rf /tmp/
 
 # ioncube needs to be loaded as first plugin, as they are loaded in alphabetical order, we need to make it the first in line
 # also installing and enabling cache extensions and enable mod rewrite
@@ -52,13 +55,14 @@ RUN echo "max_execution_time = ${MAX_EXECUTION_TIME}" > /usr/local/etc/php/conf.
     && echo "memory_limit = ${MEMORY_LIMIT}" >> /usr/local/etc/php/conf.d/tsi-config.ini
 
 # create cronjob file to only execute if cron.php is available
-RUN echo "#!/bin/bash" > /opt/tsi/cron.sh \
+RUN echo "#!/bin/sh" > /opt/tsi/cron.sh \
     && echo "" >> /opt/tsi/cron.sh \
     && echo "if [ -f /var/www/html/inc/cron.php ]; then" >> /opt/tsi/cron.sh \
     && echo "        echo 'Found cron.php file'" >> /opt/tsi/cron.sh \
     && echo "        /usr/local/bin/php /var/www/html/inc/cron.php" >> /opt/tsi/cron.sh \
     && echo "fi" >> /opt/tsi/cron.sh \
-    && chmod a+rx /opt/tsi/cron.sh
+    && chmod a+r /opt/tsi/cron.sh \
+    && chmod a+x /opt/tsi/cron.sh
 
 # add cronjob which is executed every minute
 RUN echo "# tsi crontab import file" > /opt/tsi/crontab-file.txt \
@@ -66,7 +70,7 @@ RUN echo "# tsi crontab import file" > /opt/tsi/crontab-file.txt \
     && crontab -u www-data /opt/tsi/crontab-file.txt
 
 # custom startscript to modify permissions
-RUN echo "#!/bin/bash" > /opt/tsi/start.sh \
+RUN echo "#!/bin/sh" > /opt/tsi/start.sh \
     && echo "chown -c -R www-data: /var/www/html" >> /opt/tsi/start.sh \
     && echo "cron &" >> /opt/tsi/start.sh \
     && echo "apache2-foreground" >> /opt/tsi/start.sh \
@@ -75,11 +79,7 @@ RUN echo "#!/bin/bash" > /opt/tsi/start.sh \
 # cleanup
 RUN rm /php_ext \
     && rm -rf /tmp/* \
-    && rm /opt/tsi/crontab-file.txt \
-    && apt-get remove -y wget unzip \
-    && apt-get autoclean -y \
-    && apt-get clean -y \
-    && apt-get autoremove -y
+    && rm /opt/tsi/crontab-file.txt
 
 # volumes
 VOLUME ["/var/www/html", "/var/www/html"]

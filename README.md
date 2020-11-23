@@ -35,3 +35,6 @@ You need to copy the TSI php files into the mounted folder (in this example /roo
 | ---- | ----- |
 | HTTPS redirect | https://github.com/MyUncleSam/docker-tsi/issues/3 |
 | Clickjacking prevention | https://github.com/MyUncleSam/docker-tsi/issues/1 |
+
+# Dockerfile.Alpine
+Currently prepared to use it with alpine for a smaller image. But as there is not apache image, we cannot provide all functions. So it is ready but not finished.
