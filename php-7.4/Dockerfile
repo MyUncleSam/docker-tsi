@@ -22,7 +22,7 @@ RUN /usr/bin/apt-get update \
 # https://github.com/docker-library/php/issues/926#issuecomment-567230723
 # also install ioncube
 RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg \
-    && docker-php-ext-configure zip \\
+    && docker-php-ext-configure zip \
     && docker-php-ext-install -j$(nproc) gd curl zip bcmath pdo pdo_mysql opcache \
     && wget -O /tmp/ioncube.tar.gz https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \
     && tar -xvzf /tmp/ioncube.tar.gz --directory=/tmp
