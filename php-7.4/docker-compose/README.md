@@ -85,6 +85,12 @@ As this is not meant to be used inside productive environments there is no backu
 # update
 As this is not meant to be used inside productive environment there is no update functionality included. Not sure but maybe it updates itselfe on every start.
 
+# use your own teamspeak3 server
+Just remove the complete 'tsi-ts3' part from the docker-compose.yml file. Also remove all references with the 'tsi-ts3' name. This avoids the system to start the teamspeak 3 server. If you do so, you can skip the part 4-7 from the first run documentation.
+
+There is just one thing:
+Your teamspeak 3 have to run on another machine than the docker host. It is just because docker containers cannot access ports from their host.
+
 # images used
 Here is a list of all used images. If you want or need to change some things, feel free to take a look at their documentation.
 
