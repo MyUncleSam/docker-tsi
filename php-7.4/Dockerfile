@@ -67,7 +67,7 @@ RUN echo "# tsi crontab import file" > /opt/tsi/crontab-file.txt \
 
 # custom startscript to modify permissions
 RUN echo "#!/bin/bash" > /opt/tsi/start.sh \
-    && echo "chown -c -R www-data: /var/www/html" >> /opt/tsi/start.sh \
+    && echo "chown -R www-data: /var/www/html" >> /opt/tsi/start.sh \
     && echo "cron &" >> /opt/tsi/start.sh \
     && echo "apache2-foreground" >> /opt/tsi/start.sh \
     && chmod u+x /opt/tsi/start.sh
