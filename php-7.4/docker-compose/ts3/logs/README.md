@@ -1,0 +1,1 @@
+Folder for teamspeak3 server log files.

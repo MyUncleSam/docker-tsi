@@ -1,0 +1,89 @@
+version: '3.1'
+
+services:
+  tsi-db:
+    container_name: tsi-db
+    hostname: tsi-db
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root2020
+      MYSQL_DATABASE: tsi
+      MYSQL_USER: tsi
+      MYSQL_PASSWORD: tsi2020
+    volumes:
+      - ./db/conf.d:/etc/mysql/conf.d
+      - ./db/mysql:/var/lib/mysql
+  
+  tsi:
+    container_name: tsi
+    hostname: tsi
+    image: stefanruepp/docker-tsi:php-7.4
+    depends_on: 
+      - tsi-db
+      - tsi-redis
+      - tsi-ts3
+    restart: always
+    environment:
+      - POST_MAX_SIZE=32M
+      - UPLOAD_MAX_FILESIZE=32M
+      - MAX_EXECUTION_TIME=60
+      - MAX_INPUT_TIME=120
+      - MEMORY_LIMIT=512M
+      - CRON_INTERVAL=* * * * *
+      - TZ=Europe/Berlin
+    volumes:
+      - ./html:/var/www/html
+    ports:
+      - 80:80
+    links:
+      - tsi-db
+      - tsi-redis
+      - tsi-ts3
+
+  tsi-pma:
+    container_name: tsi-pma
+    hostname: tsi-pma
+    image: phpmyadmin/phpmyadmin
+    depends_on: 
+      - tsi-db
+    environment:
+      - PMA_ARBITRARY=1
+    restart: always
+    ports:
+      - 8081:80
+    volumes:
+      - /sessions
+    links:
+      - tsi-db
+
+  tsi-redis:
+    container_name: tsi-redis
+    hostname: tsi-redis
+    image: redis
+    restart: always
+    volumes:
+      - /data
+
+  tsi-ts3:
+    container_name: tsi-ts3
+    hostname: tsi-ts3
+    image: teamspeak
+    environment: 
+    - TZ=Europe/Berlin
+    - TS3SERVER_LICENSE=accept
+    - TS3SERVER_QUERY_PROTOCOLS=raw,ssh
+    - TS3SERVER_QUERY_SSH_PORT=10022
+    - TS3SERVER_LOG_PATH=/logs
+    - TS3SERVER_IP_WHITELIST=/var/ts3server/query_ip_whitelist.txt
+    - TS3SERVER_IP_BLACKLIST=/var/ts3server/query_ip_blacklist.txt
+    restart: always
+    ports: 
+    - 10011:10011
+    - 10022:10022
+    - 30033:30033
+    - 41144:41144
+    - 9987:9987/udp
+    volumes:
+    - ./ts3/logs:/logs
+    - ./ts3/data:/var/ts3server/

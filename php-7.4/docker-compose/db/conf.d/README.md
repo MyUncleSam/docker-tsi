@@ -1,0 +1,1 @@
+Inside this folder you can provide own configuration files of the mariadb server.
