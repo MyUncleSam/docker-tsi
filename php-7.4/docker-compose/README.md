@@ -10,16 +10,15 @@ This docker-compose.yml provides a base setup for a working TSI environment. It 
 ### first run
 1. Edit docker-compose.yml based on you needs. See the 'settings' region for more information.
 2. Download TSI from https://dwwe.de and extract it into the subfolder 'html'
-3. Remove the file 'index.html' from the 'html' subfolder.
-4. On windows run the 'start_firstrun.bat' and on linux the 'start_firstrun.sh' file.
-5. Now it starts to download all needed components, set them up and starts all services. This takes some time based on your internet connection and the power of your machine.
-6. The teamspeak3 server creates two importent information on start. The serveradmin password and a token which can be used to make you sa. Just scroll up and you see them. ***(Do not access the webinterface till you noted these information! You can access the token by checking the teamspeak3 logs inside 'ts3/logs' - but the serveadmin password is not logged into these files!)***
-7. As the firstrun start scripts are only needed to get the teamspeak information we now stop it again by pressing CTRL+C. This should now stop all running processes. (On windows there is a dialog at the end, simply close the windows or choose yes or no - it does not matter what you choose.)
-8. Start it again the normal way by running 'start.bat' for windows and 'start.sh' for linux.
-9. Open your browser and go to http://localhost (it could take some seconds till the webpage is up)
-10. Follow the setup process. The default database credentials can be found in the 'default configuration' area below.
-11. The webinterface should now be ready.
-12. Please read how to stop below to avoid damage to the database!
+3. On windows run the 'start_firstrun.bat' and on linux the 'start_firstrun.sh' file.
+4. Now it starts to download all needed components, set them up and starts all services. This takes some time based on your internet connection and the power of your machine.
+5. The teamspeak3 server creates two importent information on start. The serveradmin password and a token which can be used to make you sa. Just scroll up and you see them. ***(Do not access the webinterface till you noted these information! You can access the token by checking the teamspeak3 logs inside 'ts3/logs' - but the serveadmin password is not logged into these files!)***
+6. As the firstrun start scripts are only needed to get the teamspeak information we now stop it again by pressing CTRL+C. This should now stop all running processes. (On windows there is a dialog at the end, simply close the windows or choose yes or no - it does not matter what you choose.)
+7. Start it again the normal way by running 'start.bat' for windows and 'start.sh' for linux.
+8. Open your browser and go to http://localhost (it could take some seconds till the webpage is up)
+9. Follow the setup process. The default database credentials can be found in the 'default configuration' area below.
+10. The webinterface should now be ready.
+11. Please read how to stop below to avoid damaging to the database!
 
 After all is done I recommand to enable redis caching. Go to Settings->System and scroll down till 'cache driver configuration'. See the redis cache information under the default configuration (below).
 
