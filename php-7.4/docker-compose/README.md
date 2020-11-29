@@ -32,6 +32,12 @@ On windows run the 'stop.bat' and on linux the 'stop.sh' file. All in all docker
 ## slow
 If you run it directly inside of windows it is very very slow. This is not the fault of TSI. It has something to do with how docker needs to workaround windows to be able to run containers inside windows. If you run these containers directly in linux they are fast as usual. So only consider using it with windows for testing purposes!
 
+No idea why but it is much faster if you directly start it on the WSL. Please only try this if you know linux and bash as it is to complex to describe every step here. So only the importent steps are listed:
+1. Open the bash
+2. Clone the repository
+3. Place the TSI files inside the html folder (port 22 is reserved by windows, if you want to use ssh/scp you need to change the ssh port)
+4. Follow the instructions. All ports are redirected to the local machine, but now it is much faster.
+
 ## github
 First of all take a look into the github issue list of the TSI docker image: https://github.com/MyUncleSam/docker-tsi/issues
 If you have troubles not mentioned here, feel free to create a issue on github.
