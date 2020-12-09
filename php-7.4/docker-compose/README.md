@@ -4,7 +4,7 @@ This docker-compose.yml provides a base setup for a working TSI environment. It 
 ## requirements
 - You need to have a working docker environment installed. See https://docs.docker.com/engine/ for details.
 - A copy of the 'docker-compose' folder including all files and folders in it! Easiest way is to download the whole project from https://github.com/MyUncleSam/docker-tsi/releases/latest
-- A (t)eamspeak server (not provided in this package!)
+- A tea(m)speak server (not provided in this package!)
 
 ## run
 ### first run
