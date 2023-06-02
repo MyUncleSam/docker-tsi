@@ -1,4 +1,4 @@
-FROM php:7.4.13-apache
+FROM php:7.4.33-apache
 
 # some environment variables
 ENV TZ="Europe/Berlin"
